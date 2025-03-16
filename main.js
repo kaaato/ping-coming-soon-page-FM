@@ -13,23 +13,25 @@ function handleEmailSubmit(event) {
   let formDataEntries = new FormData(this);
   let { email } = Object.fromEntries(formDataEntries);
 
-  let isValidEmail = validateEmail(email);
-  updateError(isValidEmail);
+  let validatedEmail = classifyEmail(email);
+  updateError(validatedEmail);
 }
 
-function handleInput(event) {
-  let isValidEmail = validateEmail(event.currentTarget.value);
-  setDatasetAttribute(isValidEmail);
-  if (isValidEmail) {
+function handleInput() {
+  let validatedEmail = classifyEmail(this.value);
+  if (validatedEmail === 0 || validatedEmail) {
+    errorDiv.dataset.validationState = "valid";
     errorDiv.textContent = "";
-  } else {
-    errorDiv.textContent = "Please provide a valid email address";    
-  }
+  } else if (!validatedEmail) {
+    errorDiv.dataset.validationState = "invalid";
+    errorDiv.textContent = "Please provide a valid email address";
+  } 
 }
 
-function validateEmail(email) {
+function classifyEmail(email) {
   let emailRegExp = /^\S+@\S+$/g;
-  return !!email && emailRegExp.test(email);
+  if (email.length === 0) return 0;
+  return emailRegExp.test(email)
 }
 
 function setDatasetAttribute(isValid) {
@@ -38,12 +40,14 @@ function setDatasetAttribute(isValid) {
 
 function updateError(isValid) {
   setDatasetAttribute(isValid);
-  if (isValid) {
+  if (isValid === 0) {
+    errorDiv.textContent = "Whoops! It looks like you forgot to add your email";
+  } else if (!isValid) {
+    errorDiv.textContent = "Please provide a valid email address";
+  } else {
     errorDiv.textContent = "";
     emailInput.value = "";
     form.submit();
-  } else {
-    errorDiv.textContent = "Please provide a valid email address";
   }
 }
 
