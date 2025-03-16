@@ -73,6 +73,10 @@ button {
   cursor: pointer;
 }
 
+:focus-visible {
+  outline: auto 1px var(--color-primary);
+}
+
 .visually-hidden:not(:focus):not(:active) { 
   clip: rect(0 0 0 0); 
   clip-path: inset(50%);
@@ -136,7 +140,7 @@ button {
 }
 
 .email:hover {
-  border: solid 1px var(--border-color-focus);
+  outline: auto 1px var(--color-primary);
 }
 
 .email::placeholder {
@@ -178,12 +182,18 @@ button {
   display: flex;
   gap: 15px;
   max-width: 7.5rem;
+  max-height: 30px;
   margin-inline: auto;
   margin-top: 5.5rem
 }
 
-.link:focus {
+.link {
+  display: inline-block;
+}
+
+.link:focus-visible {
   border-radius: 50%;
+  overflow: hidden;
 }
 
 .link__svg {
